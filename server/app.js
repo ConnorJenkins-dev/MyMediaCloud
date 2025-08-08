@@ -1,10 +1,14 @@
 const express = require('express')
+const {scanDirectory} = require("./services/directoryScanner");
 const app = express()
 const port = 3000
 
 require('dotenv').config();
 
 app.get('/api/test', (req, res) => {
+    // scan the directory using directoryScanner
+    scanDirectory().then(r =>
+    console.log(`Scanned directory: ${r.length} images found`));
     res.json({ message: 'Hello from the server!' })
 })
 
