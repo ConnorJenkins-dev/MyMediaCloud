@@ -1,4 +1,5 @@
 import { createRequire } from 'module';
+import { saveImageDetails } from "../repository/repoService.js";
 import donenv from 'dotenv';
 import * as path from "node:path";
 
@@ -21,6 +22,11 @@ export async function scanDirectory() {
         if (file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.jpeg')) {
             const filePath = path.join(process.env.MEDIA_DIR, file);
             const stats = fs.statSync(filePath);
+            // Save to database
+            saveImageDetails(file, stats.birthtime, filePath).catch(err => {
+                console.error('Error saving image details:', err);
+            });
+            // push image details to array
             images.push({
                 name: file,
                 size: stats.size,
