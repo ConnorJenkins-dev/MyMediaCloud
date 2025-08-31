@@ -5,8 +5,8 @@ const port = 3000
 
 require('dotenv').config();
 
-app.get('/api/test', (req, res) => {
-    // scan the directory using directoryScanner
+app.get('/api/scan', (req, res) => {
+    // scan the directory using directoryScanner, this will be called on app launch
     scanDirectory().then(r =>
     console.log(`Scanned directory: ${r.length} images found`));
     res.json({ message: 'Hello from the server!' })
