@@ -1,5 +1,7 @@
 const express = require('express')
 const {scanDirectory} = require("./services/directoryScanner");
+const {getAllImages, getLatestImages} = require("./repository/repoService");
+const {imageToBase64} = require("./services/imageToBase64")
 const app = express()
 const port = 3000
 
@@ -34,6 +36,34 @@ app.get('/api/:username-:pass', (req, res) => {
      } else {
          res.status(401).json({ error: 'Authentication failed' });
      }
+})
+
+
+// get all images
+app.get('/api/images/all', (req, res) => {
+    getAllImages()
+        .then(imageDetails => {
+            // convert imageDetails to base64
+            const imagesWithBase64 = imageToBase64(imageDetails)
+            res.status(200).json(imagesWithBase64)
+        })
+        .catch(err => {
+            console.error('Error fetching images:', err);
+            res.status(500).json({ error: 'Failed to fetch images' })
+        })
+})
+
+app.get('/api/images/latest', (req, res) => {
+    getLatestImages()
+        .then(imageDetails => {
+            // convert imageDetails to base64
+            const imagesWithBase64 = imageToBase64(imageDetails)
+            res.status(200).json(imagesWithBase64)
+        })
+        .catch(err => {
+            console.error('Error fetching latest images:', err);
+            res.status(500).json({ error: 'Failed to fetch latest images' })
+        })
 })
 
 app.listen(port, () => {
