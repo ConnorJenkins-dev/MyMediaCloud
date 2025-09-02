@@ -22,6 +22,12 @@ class imageBase64 {
 export function imageToBase64(imageDetails) {
     const imagesWithBase64 = [];
     imageDetails.forEach(image => {
+        // check if valid file path
+        if (!fs.existsSync(image.location)) {
+            console.error(`File not found: ${image.location}`);
+            const imageWithBase64 = new imageBase64(image.id, image.name, image.created_at, image.location, null);
+            return imagesWithBase64.push(imageWithBase64);
+        }
         const filePath = path.join(image.location);
         // read file and convert to base64
         const file = fs.readFileSync(filePath);
