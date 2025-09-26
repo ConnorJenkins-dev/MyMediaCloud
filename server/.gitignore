@@ -1,0 +1,14 @@
+# IntelliJ / JetBrains
+.idea/
+app/.idea/
+../.idea/
+
+# Node
+node_modules/
+
+# Environment
+.env
+
+# Misc
+*.iml
+*.class
