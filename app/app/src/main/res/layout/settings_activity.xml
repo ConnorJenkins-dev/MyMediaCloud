@@ -42,10 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/black"
         android:layout_margin="10dp"
         android:layout_below="@id/uname_title"
-        android:text="Example Username..." />
+        android:hint="Example Username..." />
 
     <View
         android:id="@+id/divider2"
@@ -72,10 +72,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/black"
         android:layout_margin="10dp"
         android:layout_below="@id/password_title"
-        android:text="My Password..." />
+        android:hint="My Password..." />
 
     <View
         android:id="@+id/divider3"
@@ -101,9 +101,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/serve_title"
         android:textSize="24sp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/black"
         android:layout_margin="10dp"
-        android:text="http://example.ddns.net/api..." />
+        android:hint="http://example.ddns.net/api..." />
 
 
     <View

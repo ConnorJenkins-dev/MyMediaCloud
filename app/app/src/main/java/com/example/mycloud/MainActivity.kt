@@ -1,5 +1,6 @@
 package com.example.mycloud
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -18,5 +19,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Log.d("MainActivity", "onCreate called")
         setContentView(R.layout.activity_main)
+
+        val intent = Intent(this, Settings_Activity::class.java)
+        startActivity(intent)
     }
 }

@@ -18,19 +18,7 @@ class Settings_Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = SettingsActivityBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbar)
-
-        val navController = findNavController(R.id.nav_host_fragment_content_settings)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
-        }
+        setContentView(R.layout.settings_activity)
     }
 
     override fun onSupportNavigateUp(): Boolean {
