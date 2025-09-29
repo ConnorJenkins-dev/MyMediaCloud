@@ -50,8 +50,10 @@ class Settings_Activity : AppCompatActivity() {
         response = findViewById(R.id.conn)
 
         // using test params, server running on localhost for testing.
+        // Localhost URL: http://10.0.2.2:3000/api/
         testURL.setOnClickListener() {
-            connectionTest("http://10.0.2.2:3000/api/", "conno", "password")
+            //println(message)
+            connectionTest(url.text.toString(), username.text.toString(), password.text.toString())
         }
     }
 
