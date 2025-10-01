@@ -13,14 +13,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.mycloud.ui.theme.MyCloudTheme
+import androidx.room.Room
+import com.example.mycloud.ui.theme.AccountDatabase
+import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("MainActivity", "onCreate called")
         setContentView(R.layout.activity_main)
+        initDB()
+    }
 
-        val intent = Intent(this, Settings_Activity::class.java)
-        startActivity(intent)
+    private fun initDB(): Thread {
+        return thread {
+            val db = Room.databaseBuilder(
+                applicationContext,
+                AccountDatabase::class.java,
+                "ACCOUNT_DATABASE"
+            ).build()
+
+            val accountInterface = db.AccountInterface()
+
+            if(accountInterface.countAccounts() != 1) {
+                val intent = Intent(this, Settings_Activity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 }
