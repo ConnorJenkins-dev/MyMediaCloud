@@ -1,5 +1,6 @@
 package com.example.mycloud
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -11,7 +12,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.room.Room
 import com.example.mycloud.databinding.SettingsActivityBinding
+import com.example.mycloud.ui.theme.Account
+import com.example.mycloud.ui.theme.AccountDatabase
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.concurrent.thread
@@ -33,6 +37,8 @@ class Settings_Activity : AppCompatActivity() {
 
     private lateinit var response : TextView
 
+    private lateinit var save : Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +54,30 @@ class Settings_Activity : AppCompatActivity() {
 
         code = findViewById(R.id.codeResp)
         response = findViewById(R.id.conn)
+        save = findViewById(R.id.save)
 
         // using test params, server running on localhost for testing.
         // Localhost URL: http://10.0.2.2:3000/api/
         testURL.setOnClickListener() {
             //println(message)
             connectionTest(url.text.toString(), username.text.toString(), password.text.toString())
+        }
+
+
+        // Save details to database
+        save.setOnClickListener() {
+            // first delete all accounts, this ensures there is only one account
+            dbOperation(null)
+
+            // Save new account details
+
+            val account = Account(uid = 0, username = username.text.toString(), password = password.text.toString(), url = url.text.toString())
+            dbOperation(account)
+
+            // switch back to main activity
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -91,6 +115,26 @@ class Settings_Activity : AppCompatActivity() {
         runOnUiThread {
             code.text = coderesp
             response.text = msg
+        }
+    }
+
+    private fun dbOperation(account: Account?): Thread {
+        return thread {
+            val db = Room.databaseBuilder(
+                applicationContext,
+                AccountDatabase::class.java,
+                "ACCOUNT_DATABASE"
+            ).build()
+
+            val accountInterface = db.AccountInterface()
+
+            if(account == null){
+                // perform delete operation
+                accountInterface.delAll()
+            } else {
+                // insert account details
+                accountInterface.insertAccount(account)
+            }
         }
     }
 }
