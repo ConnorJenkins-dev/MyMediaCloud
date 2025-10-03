@@ -1,6 +1,7 @@
 import { createRequire } from 'module';
 import { saveImageDetails } from "../repository/repoService.js";
-import donenv from 'dotenv';
+// import donenv from 'dotenv';
+import 'dotenv/config';
 import * as path from "node:path";
 
 const require = createRequire(import.meta.url);
@@ -8,7 +9,8 @@ const require = createRequire(import.meta.url);
 
 const fs = require('fs');
 
-export async function scanDirectory() {
+export function scanDirectory() {
+
     fs.readdir(process.env.MEDIA_DIR, (err, files) => {
         if (err) {
             console.error('Error reading directory:', err);
