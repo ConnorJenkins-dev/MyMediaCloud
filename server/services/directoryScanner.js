@@ -25,7 +25,8 @@ export function scanDirectory() {
             const filePath = path.join(process.env.MEDIA_DIR, file);
             const stats = fs.statSync(filePath);
             // Save to database
-            saveImageDetails(file, stats.birthtime, filePath).catch(err => {
+            // changed call to get modified date to mtime, should work with Linux
+            saveImageDetails(file, stats.mtime, filePath).catch(err => {
                 console.error('Error saving image details:', err);
             });
             // push image details to array
