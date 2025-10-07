@@ -39,7 +39,7 @@ export async function saveImageDetails(imageName, createdAt, location){
         await connection.rollback();
         throw error;
     } finally {
-        await connection.end();
+        connection.end();
     }
 
 }

@@ -1,11 +1,13 @@
 // test/imageToBase64.test.js
-const { expect } = require("chai");
-const { imageToBase64 } = require("../services/imageToBase64");
+// const { expect } = require("chai");
+// const { imageToBase64 } = require("../services/imageToBase64");
+import { expect } from 'chai';
+import { imageToBase64 } from '../services/imageToBase64.js'
 
 describe("imageToBase64", () => {
     it("converts an image object into base64", () => {
         const result = imageToBase64([
-            { id: 1, name: "test.jpg", created_at: "2023-10-10", location: "./test/testIMG.jpg" },
+            { id: 1, name: "test.jpg", created_at: "2023-10-10", location: "./testIMG.jpg" },
         ]);
 
         expect(result[0]).to.have.property("id", 1);
