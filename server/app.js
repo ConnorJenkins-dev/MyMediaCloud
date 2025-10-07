@@ -1,11 +1,12 @@
-const express = require('express')
-const {scanDirectory} = require("./services/directoryScanner");
-const {getAllImages, getLatestImages, getAllImagesFromMonth} = require("./repository/repoService");
-const {imageToBase64} = require("./services/imageToBase64")
+import express from 'express';
+import { scanDirectory } from './services/directoryScanner.js';
+import { getAllImages, getLatestImages, getAllImagesFromMonth } from './repository/repoService.js';
+import { imageToBase64 } from './services/imageToBase64.js';
+import 'dotenv/config';
 const app = express()
 const port = 3000
 
-require('dotenv').config();
+// require('dotenv').config();
 
 app.get('/api/:user-:pass/scan', (req, res) => {
     const { user, pass } = req.params;
@@ -13,8 +14,7 @@ app.get('/api/:user-:pass/scan', (req, res) => {
         return res.status(401).json({ error: 'Authentication failed' });
     }
     // scan the directory using directoryScanner, this will be called on app launch
-    scanDirectory().then(r =>
-    console.log(`Scanned directory: ${r.length} images found`));
+    scanDirectory()
     res.status(200).json({ message: 'Ready' })
 })
 
@@ -23,6 +23,8 @@ app.get('/api/:username-:pass', (req, res) => {
      const { username, pass } = req.params;
      // Here you would typically validate the username and password
      // For demonstration, we'll just return them
+
+    console.log("Auth attempt... env: ", process.env.UNAME, process.env.PASSWORD);
      if(username === process.env.UNAME && pass === process.env.PASSWORD) {
          res.status(200).json({ message: 'Authentication successful', username });
      } else {

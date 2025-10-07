@@ -1,17 +1,29 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-# Editor-based HTTP Client requests
-/httpRequests/
-# Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
+# IntelliJ / JetBrains
+.idea/
+app/.idea/
+../.idea/
 
-/node_modules/*
-/.env
-../.idea
+# Node
+node_modules/
 
-#Becuase git is being a little hecc run:
+server/node_modules/
 
-.idea/*
+# Environment
+.env
+
+# Misc
+*.iml
+*.class
+
+
+# Android files:
+app/.gradle/*
 app/.idea/*
+app/build/
+app/captures/
+app/local.properties
+app/*.iml
+app/.DS_Store
+app/.externalNativeBuild
+app/.cxx
+
