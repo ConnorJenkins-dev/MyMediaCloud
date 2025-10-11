@@ -25,6 +25,9 @@ class MainActivity : ComponentActivity() {
         Log.d("MainActivity", "onCreate called")
         setContentView(R.layout.activity_main)
         initDB()
+
+        // Call scan
+        // Get Latest
     }
 
     private fun initDB(): Thread {
@@ -40,6 +43,8 @@ class MainActivity : ComponentActivity() {
             if(accountInterface.countAccounts() != 1) {
                 val intent = Intent(this, Settings_Activity::class.java)
                 startActivity(intent)
+            } else {
+                // Call Scan!
             }
         }
     }
