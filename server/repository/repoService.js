@@ -1,21 +1,17 @@
 // Save image details to database
 
 import { createRequire } from 'module';
-import mysql from 'mysql2/promise';
+// import mysql from 'mysql2/promise';
+
+import pool from "./dbPool.js";
 
 // global variable
 
 export async function saveImageDetails(imageName, createdAt, location){
 
     const require = createRequire(import.meta.url);
-    //Connect to mariadb
 
-    const connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-    })
+    const connection = await pool.getConnection();
 
     try {
         await connection.beginTransaction();
@@ -39,37 +35,27 @@ export async function saveImageDetails(imageName, createdAt, location){
         await connection.rollback();
         throw error;
     } finally {
-        connection.end();
+        connection.release();
     }
 
 }
 
 export async function getAllImages(){
     // Get all images from database
-    const connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-    })
+    const connection = await pool.getConnection();
     try {
         const [rows] = await connection.query('SELECT * FROM images');
         return rows;
     } catch (error) {
         throw error;
     } finally {
-        await connection.end();
+        await connection.release();
     }
 }
 // app will display latest 16 images
 export async function getLatestImages(){
     // Get latest 16 images from database
-    const connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-    })
+    const connection = await pool.getConnection();
 
     try {
         const [rows] = await connection.query('SELECT * FROM images ORDER BY created_at DESC LIMIT 16');
@@ -77,18 +63,13 @@ export async function getLatestImages(){
     } catch (error) {
         throw error;
     } finally {
-        await connection.end();
+        await connection.release();
     }
 }
 
 export async function getAllImagesFromMonth(month, year){
     // Get all images from a specific month and year
-    const connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-    })
+    const connection = await pool.getConnection();
 
     try {
         const [rows] = await connection.query('SELECT * FROM images WHERE MONTH(created_at) = ? AND YEAR(created_at) = ?', [month, year]);
@@ -96,6 +77,6 @@ export async function getAllImagesFromMonth(month, year){
     } catch (error) {
         throw error;
     } finally {
-        await connection.end();
+        await connection.release();
     }
 }
