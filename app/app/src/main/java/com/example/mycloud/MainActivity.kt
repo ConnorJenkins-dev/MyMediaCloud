@@ -16,11 +16,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.mycloud.ui.theme.MyCloudTheme
 import androidx.room.Room
 import com.example.mycloud.ui.theme.AccountDatabase
+import com.example.mycloud.ui.theme.AccountInterface
 import kotlin.concurrent.thread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+import com.example.mycloud.APICall
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var settings : Button
+
+    private lateinit var accountInterface : AccountInterface
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,13 +55,17 @@ class MainActivity : ComponentActivity() {
                 "ACCOUNT_DATABASE"
             ).build()
 
-            val accountInterface = db.AccountInterface()
+            accountInterface = db.AccountInterface()
 
             if(accountInterface.countAccounts() != 1) {
                 val intent = Intent(this, Settings_Activity::class.java)
                 startActivity(intent)
             } else {
                 // Call Scan!
+                CoroutineScope(Dispatchers.IO).launch {
+                    val code = APICall().scan(accountInterface)
+                    System.out.println("CODE: $code")
+                }
             }
         }
     }
