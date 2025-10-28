@@ -1,9 +1,11 @@
 package com.example.mycloud
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,12 +25,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 import com.example.mycloud.APICall
+import kotlinx.coroutines.withContext
+import kotlin.io.encoding.Base64
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var settings : Button
 
+    private lateinit var imageview : ImageView
+
     private lateinit var accountInterface : AccountInterface
+
+    var dbReady = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +44,7 @@ class MainActivity : ComponentActivity() {
         Log.d("MainActivity", "onCreate called")
         setContentView(R.layout.activity_main)
         settings = findViewById(R.id.settings)
+        imageview = findViewById(R.id.imageView2)
         initDB()
 
         // Call scan
@@ -44,6 +53,17 @@ class MainActivity : ComponentActivity() {
         settings.setOnClickListener() {
             val intent = Intent(this, Settings_Activity::class.java)
             startActivity(intent)
+        }
+
+        when(dbReady){
+            true ->
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val code = APICall().getMedia(accountInterface, 1, 2023)
+                println(code)
+            }
+
+            false -> null
         }
     }
 
@@ -61,10 +81,34 @@ class MainActivity : ComponentActivity() {
                 val intent = Intent(this, Settings_Activity::class.java)
                 startActivity(intent)
             } else {
+                // set bool that DB accountInterface is ready
+                dbReady = true
+
                 // Call Scan!
                 CoroutineScope(Dispatchers.IO).launch {
                     val code = APICall().scan(accountInterface)
                     System.out.println("CODE: $code")
+                }
+
+                // Debug, get some base64 (test)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val code = APICall().getMedia(accountInterface, 1, 2023)
+                    println(code?.length())
+                    
+                    val first = code?.getJSONObject(0)
+                    val first64 : String? = first?.getString("base64")
+
+                    if(first64.isNullOrEmpty()) {
+                        return@launch
+                    }
+                    val imageBytes = Base64.decode(first64, 0, first64.length)
+
+                    val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+
+                    withContext(Dispatchers.Main) {
+                        imageview.setImageBitmap(bitmap)
+                    }
                 }
             }
         }
